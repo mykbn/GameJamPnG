@@ -209,7 +209,7 @@ public class UIInput : MonoBehaviour
 			if (mDoInit) Init();
 			mDrawStart = 0;
 
-#if MOBILE && !UNITY_3_5
+#if MOBILE && !UNITY_3_5 && !UNITY_5_0_1 
 			// BB10's implementation has a bug in Unity
 			if (Application.platform == RuntimePlatform.BB10Player)
 				value = value.Replace("\\b", "\b");
