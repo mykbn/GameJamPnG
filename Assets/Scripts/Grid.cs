@@ -13,7 +13,7 @@ public class Grid : MonoBehaviour {
 	float nodeDiameter;
 	int gridSizeX, gridSizeY;
 
-	void Start(){
+	void Awake(){
 		nodeDiameter = nodeRadius * 2; //Because diameter is always double the radius (basic geometry)
 		gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter); //To find out how many nodes can fit in the x axis of the grid
 		gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter); //To find out how many nodes can fit in the y(actually z-axis in 3d) axis of the grid
