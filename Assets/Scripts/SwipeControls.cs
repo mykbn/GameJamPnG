@@ -10,7 +10,11 @@ public class SwipeControls : MonoBehaviour {
 	
 	public float minSwipeDistX;
 	
-	private Vector2 startPos;
+	private Vector2 firstPressPos;
+
+	private Vector2 secondPressPos;
+
+	private Vector3 currentSwipe;
 	
 	void Update()
 	{
@@ -31,49 +35,49 @@ public class SwipeControls : MonoBehaviour {
 
 		}
 
-		//#if UNITY_ANDROID
-		if (Input.touchCount > 0) 
-			
+		if(Input.touches.Length > 0)
 		{
-			
-			Touch touch = Input.touches[0];
-			
-			switch (touch.phase){
+			Touch t = Input.GetTouch(0);
+			if(t.phase == TouchPhase.Began)
+			{
+				//save began touch 2d point
+				firstPressPos = new Vector2(t.position.x,t.position.y);
+			}
+			if(t.phase == TouchPhase.Ended)
+			{
+				//save ended touch 2d point
+				secondPressPos = new Vector2(t.position.x,t.position.y);
 				
-			case TouchPhase.Began:
-				startPos = touch.position;
-				break;
-			case TouchPhase.Ended:
-				float swipeDistVertical = (new Vector3(0, touch.position.y, 0) - new Vector3(0, startPos.y, 0)).magnitude;
-				if (swipeDistVertical > minSwipeDistY) 
+				//create vector from the two points
+				currentSwipe = new Vector3(secondPressPos.x - firstPressPos.x, secondPressPos.y - firstPressPos.y);
+				
+				//normalize the 2d vector
+				currentSwipe.Normalize();
+				
+				//swipe upwards
+				if(currentSwipe.y > 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
 				{
-					float swipeValue = Mathf.Sign(touch.position.y - startPos.y);
-					if (swipeValue > 0){//up
-						SwipeControl(DIRECTIONS.UP);
-					}
-												
-					else if (swipeValue < 0){//down
-						SwipeControl(DIRECTIONS.DOWN);
-					}
-								
+					SwipeControl(DIRECTIONS.UP);
+					Debug.Log("up swipe");
 				}
-
-				float swipeDistHorizontal = (new Vector3(touch.position.x,0, 0) - new Vector3(startPos.x, 0, 0)).magnitude;
-				if (swipeDistHorizontal > minSwipeDistX) 
-					
+				//swipe down
+				if(currentSwipe.y < 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
 				{
-					float swipeValue = Mathf.Sign(touch.position.x - startPos.x);
-					
-					if (swipeValue > 0){//right
-						SwipeControl(DIRECTIONS.RIGHT);
-					}
-						
-					else if (swipeValue < 0){//left
-						SwipeControl(DIRECTIONS.LEFT);
-					}
-							
+					SwipeControl(DIRECTIONS.DOWN);
+					Debug.Log("down swipe");
 				}
-				break;
+				//swipe left
+				if(currentSwipe.x < 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
+				{
+					SwipeControl(DIRECTIONS.LEFT);
+					Debug.Log("left swipe");
+				}
+				//swipe right
+				if(currentSwipe.x > 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
+				{
+					SwipeControl(DIRECTIONS.RIGHT);
+					Debug.Log("right swipe");
+				}
 			}
 		}
 	}
