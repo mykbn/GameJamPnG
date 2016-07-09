@@ -11,8 +11,8 @@ public class Player : MonoBehaviour {
 	public Node currentNode;
 	public DIRECTIONS currentDirection;
 	public Animator animPlayer;
+	public MAZES currentMaze;
 
-	public bool isMoving;
 	public float speed;
 
 	void Awake(){
@@ -29,12 +29,15 @@ public class Player : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-//	void Update () {
-//	
-//		if(isMoving){
-////			MovePlayer(currentDirection);
-//		}
-//	}
+	void Update () {
+		if(rgdPlayer.velocity == Vector3.zero){
+			animPlayer.Play("idle",0,0f);
+		}else{
+			if(!animPlayer.GetCurrentAnimatorStateInfo(0).IsName("walk")){
+				animPlayer.Play("walk",0,0f);
+			}
+		}
+	}
 	public void PlayerDirection(DIRECTIONS direction){
 		FacePlayer(direction);
 	}
@@ -63,9 +66,7 @@ public class Player : MonoBehaviour {
 		MovePlayer(direction);
 	}
 	public void MovePlayer(DIRECTIONS direction){
-		if(!animPlayer.GetCurrentAnimatorStateInfo(0).IsName("walk")){
-			animPlayer.Play("walk",0,0f);
-		}
+
 		rgdPlayer.velocity = Vector3.zero;
 		rgdPlayer.drag = 0f;
 		if(direction == DIRECTIONS.LEFT){
@@ -136,17 +137,26 @@ public class Player : MonoBehaviour {
 		if(rgdPlayer.velocity == Vector3.zero){
 			animPlayer.Play("idle",0,0f);
 		}
-//		Debug.Log(goPlayer.transform.position);
-//		currentNode = grid.NodeFromWorldPoint(goPlayer.transform.position);
-//		goPlayer.GetComponent<TweenPosition>().from = goPlayer.transform.position;
-//		goPlayer.GetComponent<TweenPosition>().to = currentNode.worldPosition;
-//		goPlayer.GetComponent<TweenPosition>().ResetToBeginning();
-//		goPlayer.GetComponent<TweenPosition>().PlayForward();
 	}
 	void OnCollisionEnter(Collision other){
 		if(other.gameObject.tag == "wall"){
 			Debug.Log("WALL");
 			StopMoving();
+		}
+	}
+
+	void OnTriggerStay(Collider other){
+		if(other.gameObject.tag == "mazeA"){
+			currentMaze = MAZES.A;
+		}
+		if(other.gameObject.tag == "mazeB"){
+			currentMaze = MAZES.B;
+		}
+		if(other.gameObject.tag == "mazeC"){
+			currentMaze = MAZES.C;
+		}
+		if(other.gameObject.tag == "mazeD"){
+			currentMaze = MAZES.D;
 		}
 	}
 }
