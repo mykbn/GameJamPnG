@@ -12,6 +12,8 @@ public class Player : MonoBehaviour {
 	public DIRECTIONS currentDirection;
 	public Animator animPlayer;
 
+	public SpriteRenderer playerSprite;
+
 	public bool isMoving;
 	public float speed;
 
@@ -25,7 +27,7 @@ public class Player : MonoBehaviour {
 //		currentNode = grid.NodeFromWorldPoint(goPlayer.transform.position);
 //		goPlayer.transform.position = currentNode.worldPosition;
 //		Debug.Log(goPlayer.transform.position);
-		MovePlayer(currentDirection);
+//		MovePlayer(currentDirection);
 	}
 
 	// Update is called once per frame
@@ -143,6 +145,15 @@ public class Player : MonoBehaviour {
 //		goPlayer.GetComponent<TweenPosition>().ResetToBeginning();
 //		goPlayer.GetComponent<TweenPosition>().PlayForward();
 	}
+
+	public void HidePlayer(bool state){
+		if (state) {
+			playerSprite.color = Color.black;
+		} else {
+			playerSprite.color = Color.white;
+		}
+	}
+
 	void OnCollisionEnter(Collision other){
 		if(other.gameObject.tag == "wall"){
 			Debug.Log("WALL");
