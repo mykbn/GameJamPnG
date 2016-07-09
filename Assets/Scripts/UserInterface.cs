@@ -5,6 +5,8 @@ public class UserInterface : MonoBehaviour {
 
 	[SerializeField] private TweenScale tsLogo;
 	[SerializeField] private AnimationCurve normalAnimCurve;
+	[SerializeField] private GameObject goIngameUI;
+	[SerializeField] private GameObject goPauseMenu;
 
 	public void OnClickTap(){
 		Debug.Log("TAPPED");
@@ -20,6 +22,36 @@ public class UserInterface : MonoBehaviour {
 		StartCoroutine(IntroLogo());
 	}
 
+	public void ShowInGameUI(){
+		NGUITools.SetActive (goIngameUI, true);
+		FadeChildren(goIngameUI, true);
+	}
+
+	public void PauseGame(){
+		NGUITools.SetActive(goPauseMenu, true);
+		Time.timeScale = 0f;
+		FadeChildren(goPauseMenu, true);
+	}
+
+	public void UnPauseGame(){
+		NGUITools.SetActive(goPauseMenu, false);
+		Time.timeScale = 1f;
+		FadeChildren(goPauseMenu, false);
+	}
+
+	private void FadeChildren(GameObject goParent, bool fadeIn){
+		TweenAlpha[] tweens = goParent.GetComponentsInChildren<TweenAlpha>();
+		for (int i = 0; i < tweens.Length; i++) {
+			tweens[i].enabled = true;
+			if(fadeIn){
+				tweens[i].ResetToBeginning();
+				tweens[i].Play();
+			}else{
+				tweens[i].PlayReverse();
+			}
+		}
+	}
+
 	IEnumerator IntroLogo(){
 		yield return new WaitForSeconds (0.5f);
 		tsLogo.ResetToBeginning();
@@ -33,7 +65,10 @@ public class UserInterface : MonoBehaviour {
 		yield return new WaitForSeconds(1f);
 		Player.Instance.HidePlayer(false);
 		LightController.Instance.GradualLightChange(8f);
+		yield return new WaitForSeconds(0.5f);
+		ShowInGameUI();
 		yield break;
 	}
+
 
 }
