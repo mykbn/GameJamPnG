@@ -21,7 +21,7 @@ public class Player : MonoBehaviour {
 	public float lightVal;
 	public float foodVal;
 	public float score;
-
+	public int difficulty = 0;
 
 	void Awake(){
 		if (Instance == null) {
@@ -210,19 +210,41 @@ public class Player : MonoBehaviour {
 		}
 
 	}
+
+	private void IncreaseDifficulty(){
+		if (MazeManager.Instance.intFoodCount != 0 || MazeManager.Instance.intFuelCount != 0) {
+			return;
+		}
+
+		difficulty += 1;
+
+		if (difficulty == 0) {
+			MazeManager.Instance.SpawnFuelAndFood (8);
+		}else if (difficulty == 1) {
+			MazeManager.Instance.SpawnFuelAndFood(6);
+		}else if (difficulty == 2) {
+			MazeManager.Instance.SpawnFuelAndFood(4);
+		}else if (difficulty >= 3) {
+			MazeManager.Instance.SpawnFuelAndFood(2);
+			difficulty = 3;
+		}
+
+		MazeManager.Instance.RotateMazes();
+	}
+
 	void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "fuel"){
 			Debug.Log("FUEL");
 			MazeManager.Instance.intFuelCount -= 1;
 			IncreaseLightValue(30f);
-
+			IncreaseDifficulty();
 			Destroy(other.gameObject);
 		}
 		if(other.gameObject.tag == "food"){
 			Debug.Log("FOOD");
 			MazeManager.Instance.intFoodCount -= 1;
 			IncreaseFoodValue(30f);
-
+			IncreaseDifficulty();
 			Destroy(other.gameObject);
 		}
 	}

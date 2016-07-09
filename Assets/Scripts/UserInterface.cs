@@ -174,6 +174,9 @@ public class UserInterface : MonoBehaviour {
 			lblScore.text = FormatTime(Player.Instance.score);
 			lblFoodCount.text = (MazeManager.Instance.totalFoodCount - MazeManager.Instance.intFoodCount).ToString() + "/" + MazeManager.Instance.totalFoodCount.ToString();
 			lblFuelCount.text = (MazeManager.Instance.totalFuelCount - MazeManager.Instance.intFuelCount).ToString() + "/" + MazeManager.Instance.totalFuelCount.ToString();
+			if(MazeManager.Instance.intFoodCount == 0 && MazeManager.Instance.intFuelCount == 0){
+				Debug.Log("Done");
+			}
 
 		}
 	}

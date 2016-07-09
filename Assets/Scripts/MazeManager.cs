@@ -36,7 +36,7 @@ public class MazeManager : MonoBehaviour {
 	}
 
 	void Start(){
-		SpawnFuelAndFood(11);
+		SpawnFuelAndFood(8);
 	}
 	public void RotateMazes(){
 		switch(player.currentMaze){
