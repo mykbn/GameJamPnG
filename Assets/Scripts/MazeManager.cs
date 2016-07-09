@@ -24,8 +24,9 @@ public class MazeManager : MonoBehaviour {
 //	public int intMaxSpawnAmount;
 
 	void Awake(){
-
+		Instance = this;
 	}
+
 	void Start(){
 		SpawnFuelAndFood(11);
 	}

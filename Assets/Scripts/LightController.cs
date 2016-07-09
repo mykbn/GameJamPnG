@@ -17,15 +17,24 @@ public class LightController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
+		if (Player.Instance && UserInterface.Instance) {
+			if(UserInterface.Instance.isIntroDone){
+				float percent = Player.Instance.lightVal/100f;
+				lightObj.range = (percent) * 30f; // 30f being the full value
+				if(percent != 0 && lightObj.range < 4f){
+					lightObj.range = 4f;
+
+				}
+			}
+		}
 	}
 
 	public void TurnOffLight(){
-		lightObj.intensity = 0f;
+		lightObj.range = 0f;
 	}
 
 	public void TurnOnLight(){
-		lightObj.intensity = 8f;
+		lightObj.range = 30f;
 	}
 
 	public void GradualLightChange(float target){

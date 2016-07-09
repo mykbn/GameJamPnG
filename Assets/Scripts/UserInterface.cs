@@ -3,10 +3,20 @@ using System.Collections;
 
 public class UserInterface : MonoBehaviour {
 
+	public static UserInterface Instance;
+
 	[SerializeField] private TweenScale tsLogo;
 	[SerializeField] private AnimationCurve normalAnimCurve;
 	[SerializeField] private GameObject goIngameUI;
 	[SerializeField] private GameObject goPauseMenu;
+	[SerializeField] private UIProgressBar progBarLight;
+	[SerializeField] private UILabel lblScore;
+
+	public bool isIntroDone = false;
+
+	void Awake(){
+		Instance = this;
+	}
 
 	public void OnClickTap(){
 		Debug.Log("TAPPED");
@@ -67,7 +77,16 @@ public class UserInterface : MonoBehaviour {
 		LightController.Instance.GradualLightChange(8f);
 		yield return new WaitForSeconds(0.5f);
 		ShowInGameUI();
+		isIntroDone = true;
 		yield break;
+	}
+
+	void Update(){
+		if(Player.Instance){
+			//Change Progress Bar Value Based on players lightVal
+			progBarLight.value = (Player.Instance.lightVal / 100f);
+			lblScore.text = string.Format("{0}:{1:00}", (int)Player.Instance.score / 60, (int)Player.Instance.score % 60);
+		}
 	}
 
 

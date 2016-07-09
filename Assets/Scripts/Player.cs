@@ -18,6 +18,9 @@ public class Player : MonoBehaviour {
 	public bool isMoving;
 	public float speed;
 
+	public float lightVal;
+	public float score;
+
 	void Awake(){
 		Instance = this;
 	}
@@ -41,9 +44,29 @@ public class Player : MonoBehaviour {
 			}
 		}
 	}
+
+	public void ReduceLightValue(float reductionValue){
+		lightVal -= reductionValue;
+		if (lightVal < 0f) {
+			lightVal = 0f;
+		}
+	}
+
+	public void IncreaseLightValue(float increaseValue){
+		lightVal -= increaseValue;
+		if (lightVal > 100f) {
+			lightVal = 100f;
+		}
+	}
+
+	public void SetScore(float score){
+		this.score = score;
+	}
+
 	public void PlayerDirection(DIRECTIONS direction){
 		FacePlayer(direction);
 	}
+
 	public void FacePlayer(DIRECTIONS direction){
 		if(direction == currentDirection){
 			return;
@@ -68,6 +91,7 @@ public class Player : MonoBehaviour {
 //		isMoving = true;
 		MovePlayer(direction);
 	}
+
 	public void MovePlayer(DIRECTIONS direction){
 
 		rgdPlayer.velocity = Vector3.zero;
@@ -88,6 +112,7 @@ public class Player : MonoBehaviour {
 
 		}
 	}
+
 	public void MovePlayer(){
 		List<Node> neighbors = grid.GetNeighbours(currentNode);
 		if(currentDirection == DIRECTIONS.LEFT){
@@ -136,6 +161,7 @@ public class Player : MonoBehaviour {
 		}
 
 	}
+
 	public void StopMoving(){
 		if(rgdPlayer.velocity == Vector3.zero){
 			animPlayer.Play("idle",0,0f);
@@ -149,7 +175,7 @@ public class Player : MonoBehaviour {
 			playerSprite.color = Color.white;
 		}
 	}
-
+	
 	void OnCollisionEnter(Collision other){
 		if(other.gameObject.tag == "wall"){
 			Debug.Log("WALL");
