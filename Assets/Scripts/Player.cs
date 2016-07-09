@@ -155,6 +155,10 @@ public class Player : MonoBehaviour {
 			Debug.Log("WALL");
 			StopMoving();
 		}
+		if(other.gameObject.tag == "hole"){
+			Debug.Log("HOLE");
+			//DIE
+		}
 	}
 
 	void OnTriggerStay(Collider other){

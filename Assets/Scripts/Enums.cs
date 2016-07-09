@@ -3,6 +3,7 @@
 	RIGHT,
 	UP,
 	DOWN,
+	NONE,
 }
 
 public enum MAZES{

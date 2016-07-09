@@ -1,12 +1,24 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class MazeManager : MonoBehaviour {
 	public Player player;
+	public GameObject goFuel;
 	public GameObject[] goMazes;
 	public GameObject goCurrentMaze;
 	public float[] fltRotationAngles;
+	public Transform[] transSpawnAreaMazeA;
+	public Transform[] transSpawnAreaMazeB;
+	public Transform[] transSpawnAreaMazeC;
+	public Transform[] transSpawnAreaMazeD;
 
+//	public int intMaxSpawnAmount;
+	void Start(){
+		SpawnFuel(11);
+	}
 	public void RotateMazes(){
 		switch(player.currentMaze){
 		case MAZES.A:
@@ -29,6 +41,43 @@ public class MazeManager : MonoBehaviour {
 				goMazes[i].transform.rotation = Quaternion.identity;
 				goMazes[i].transform.Rotate(new Vector3(0f,0f,fltRotationAngles[intRandom]));
 			}
+		}
+	}
+	public void SpawnFuel(int intAmount){
+		List<Transform> currentMazeA = new List<Transform>(transSpawnAreaMazeA);
+		for(int i = 0; i < intAmount; i++){
+			int intRandom = UnityEngine.Random.Range(0,currentMazeA.Count);
+			GameObject go = (GameObject) GameObject.Instantiate(goFuel);
+			go.transform.parent = currentMazeA[intRandom].transform;
+			go.transform.localPosition = Vector3.zero;
+			currentMazeA.RemoveAt(intRandom);
+		}
+
+		List<Transform> currentMazeB = new List<Transform>(transSpawnAreaMazeB);
+		for(int i = 0; i < intAmount; i++){
+			int intRandom = UnityEngine.Random.Range(0,currentMazeB.Count);
+			GameObject go = (GameObject) GameObject.Instantiate(goFuel);
+			go.transform.parent = currentMazeB[intRandom].transform;
+			go.transform.localPosition = Vector3.zero;
+			currentMazeB.RemoveAt(intRandom);
+		}
+
+		List<Transform> currentMazeC = new List<Transform>(transSpawnAreaMazeC);
+		for(int i = 0; i < intAmount; i++){
+			int intRandom = UnityEngine.Random.Range(0,currentMazeC.Count);
+			GameObject go = (GameObject) GameObject.Instantiate(goFuel);
+			go.transform.parent = currentMazeC[intRandom].transform;
+			go.transform.localPosition = Vector3.zero;
+			currentMazeC.RemoveAt(intRandom);
+		}
+
+		List<Transform> currentMazeD = new List<Transform>(transSpawnAreaMazeD);
+		for(int i = 0; i < intAmount; i++){
+			int intRandom = UnityEngine.Random.Range(0,currentMazeD.Count);
+			GameObject go = (GameObject) GameObject.Instantiate(goFuel);
+			go.transform.parent = currentMazeD[intRandom].transform;
+			go.transform.localPosition = Vector3.zero;
+			currentMazeD.RemoveAt(intRandom);
 		}
 	}
 }
