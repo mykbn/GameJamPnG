@@ -10,6 +10,7 @@ public class Player : MonoBehaviour {
 	public Grid grid;
 	public Node currentNode;
 	public DIRECTIONS currentDirection;
+	public Animator animPlayer;
 
 	public bool isMoving;
 	public float speed;
@@ -28,19 +29,19 @@ public class Player : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update () {
-	
-		if(isMoving){
-//			MovePlayer(currentDirection);
-		}
-	}
+//	void Update () {
+//	
+//		if(isMoving){
+////			MovePlayer(currentDirection);
+//		}
+//	}
 	public void PlayerDirection(DIRECTIONS direction){
 		FacePlayer(direction);
 	}
 	public void FacePlayer(DIRECTIONS direction){
-//		if(!isMoving && direction == currentDirection){
-//			return;
-//		}
+		if(direction == currentDirection){
+			return;
+		}
 		currentDirection = direction;
 		goPlayer.transform.rotation = Quaternion.identity;
 		if(direction == DIRECTIONS.LEFT){
@@ -62,7 +63,11 @@ public class Player : MonoBehaviour {
 		MovePlayer(direction);
 	}
 	public void MovePlayer(DIRECTIONS direction){
+		if(!animPlayer.GetCurrentAnimatorStateInfo(0).IsName("walk")){
+			animPlayer.Play("walk",0,0f);
+		}
 		rgdPlayer.velocity = Vector3.zero;
+		rgdPlayer.drag = 0f;
 		if(direction == DIRECTIONS.LEFT){
 			rgdPlayer.AddForce (Vector3.left * speed, ForceMode.Force);
 		}
@@ -128,8 +133,10 @@ public class Player : MonoBehaviour {
 
 	}
 	public void StopMoving(){
-		isMoving = false;
-		Debug.Log(goPlayer.transform.position);
+		if(rgdPlayer.velocity == Vector3.zero){
+			animPlayer.Play("idle",0,0f);
+		}
+//		Debug.Log(goPlayer.transform.position);
 //		currentNode = grid.NodeFromWorldPoint(goPlayer.transform.position);
 //		goPlayer.GetComponent<TweenPosition>().from = goPlayer.transform.position;
 //		goPlayer.GetComponent<TweenPosition>().to = currentNode.worldPosition;
@@ -139,7 +146,7 @@ public class Player : MonoBehaviour {
 	void OnCollisionEnter(Collision other){
 		if(other.gameObject.tag == "wall"){
 			Debug.Log("WALL");
-//			StopMoving();
+			StopMoving();
 		}
 	}
 }
