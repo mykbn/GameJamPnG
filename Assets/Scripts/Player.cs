@@ -159,8 +159,20 @@ public class Player : MonoBehaviour {
 			Debug.Log("HOLE");
 			//DIE
 		}
-	}
 
+	}
+	void OnTriggerEnter(Collider other){
+		if(other.gameObject.tag == "fuel"){
+			Debug.Log("FUEL");
+			MazeManager.Instance.intFuelCount -= 1;
+			Destroy(other.gameObject);
+		}
+		if(other.gameObject.tag == "food"){
+			Debug.Log("FOOD");
+			MazeManager.Instance.intFoodCount -= 1;
+			Destroy(other.gameObject);
+		}
+	}
 	void OnTriggerStay(Collider other){
 		if(other.gameObject.tag == "mazeA"){
 			currentMaze = MAZES.A;

@@ -5,8 +5,12 @@ using System.Collections.Generic;
 
 
 public class MazeManager : MonoBehaviour {
+	public static MazeManager Instance;
+
 	public Player player;
 	public GameObject goFuel;
+	public GameObject goFood;
+
 	public GameObject[] goMazes;
 	public GameObject goCurrentMaze;
 	public float[] fltRotationAngles;
@@ -15,9 +19,15 @@ public class MazeManager : MonoBehaviour {
 	public Transform[] transSpawnAreaMazeC;
 	public Transform[] transSpawnAreaMazeD;
 
+	public int intFoodCount;
+	public int intFuelCount;
 //	public int intMaxSpawnAmount;
+
+	void Awake(){
+
+	}
 	void Start(){
-		SpawnFuel(11);
+		SpawnFuelAndFood(11);
 	}
 	public void RotateMazes(){
 		switch(player.currentMaze){
@@ -43,11 +53,22 @@ public class MazeManager : MonoBehaviour {
 			}
 		}
 	}
-	public void SpawnFuel(int intAmount){
+	public void SpawnFuelAndFood(int intAmount){
 		List<Transform> currentMazeA = new List<Transform>(transSpawnAreaMazeA);
 		for(int i = 0; i < intAmount; i++){
 			int intRandom = UnityEngine.Random.Range(0,currentMazeA.Count);
-			GameObject go = (GameObject) GameObject.Instantiate(goFuel);
+			int intRandomItem = UnityEngine.Random.Range(0,2);
+			GameObject go;
+			if(intRandomItem == 0){
+				go = (GameObject) GameObject.Instantiate(goFuel);
+				intFuelCount += 1;
+
+
+			}else{
+				go = (GameObject) GameObject.Instantiate(goFood);
+				intFoodCount += 1;
+			}
+
 			go.transform.parent = currentMazeA[intRandom].transform;
 			go.transform.localPosition = Vector3.zero;
 			currentMazeA.RemoveAt(intRandom);
@@ -56,28 +77,62 @@ public class MazeManager : MonoBehaviour {
 		List<Transform> currentMazeB = new List<Transform>(transSpawnAreaMazeB);
 		for(int i = 0; i < intAmount; i++){
 			int intRandom = UnityEngine.Random.Range(0,currentMazeB.Count);
-			GameObject go = (GameObject) GameObject.Instantiate(goFuel);
+			int intRandomItem = UnityEngine.Random.Range(0,2);
+			GameObject go;
+			if(intRandomItem == 0){
+				go = (GameObject) GameObject.Instantiate(goFuel);
+				intFuelCount += 1;
+
+			}else{
+				go = (GameObject) GameObject.Instantiate(goFood);
+				intFoodCount += 1;
+
+			}
 			go.transform.parent = currentMazeB[intRandom].transform;
 			go.transform.localPosition = Vector3.zero;
 			currentMazeB.RemoveAt(intRandom);
+
 		}
 
 		List<Transform> currentMazeC = new List<Transform>(transSpawnAreaMazeC);
 		for(int i = 0; i < intAmount; i++){
 			int intRandom = UnityEngine.Random.Range(0,currentMazeC.Count);
-			GameObject go = (GameObject) GameObject.Instantiate(goFuel);
+			int intRandomItem = UnityEngine.Random.Range(0,2);
+			GameObject go;
+			if(intRandomItem == 0){
+				go = (GameObject) GameObject.Instantiate(goFuel);
+				intFuelCount += 1;
+
+			}else{
+				go = (GameObject) GameObject.Instantiate(goFood);
+				intFoodCount += 1;
+
+			}
 			go.transform.parent = currentMazeC[intRandom].transform;
 			go.transform.localPosition = Vector3.zero;
 			currentMazeC.RemoveAt(intRandom);
+
 		}
 
 		List<Transform> currentMazeD = new List<Transform>(transSpawnAreaMazeD);
 		for(int i = 0; i < intAmount; i++){
 			int intRandom = UnityEngine.Random.Range(0,currentMazeD.Count);
-			GameObject go = (GameObject) GameObject.Instantiate(goFuel);
+			int intRandomItem = UnityEngine.Random.Range(0,2);
+			GameObject go;
+			if(intRandomItem == 0){
+				go = (GameObject) GameObject.Instantiate(goFuel);
+				intFuelCount += 1;
+
+			}else{
+				go = (GameObject) GameObject.Instantiate(goFood);
+				intFoodCount += 1;
+
+			}
 			go.transform.parent = currentMazeD[intRandom].transform;
 			go.transform.localPosition = Vector3.zero;
 			currentMazeD.RemoveAt(intRandom);
+
 		}
 	}
+
 }
