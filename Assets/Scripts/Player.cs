@@ -13,6 +13,9 @@ public class Player : MonoBehaviour {
 	public Animator animPlayer;
 	public MAZES currentMaze;
 
+	public SpriteRenderer playerSprite;
+
+	public bool isMoving;
 	public float speed;
 
 	void Awake(){
@@ -25,7 +28,7 @@ public class Player : MonoBehaviour {
 //		currentNode = grid.NodeFromWorldPoint(goPlayer.transform.position);
 //		goPlayer.transform.position = currentNode.worldPosition;
 //		Debug.Log(goPlayer.transform.position);
-		MovePlayer(currentDirection);
+//		MovePlayer(currentDirection);
 	}
 
 	// Update is called once per frame
@@ -138,6 +141,15 @@ public class Player : MonoBehaviour {
 			animPlayer.Play("idle",0,0f);
 		}
 	}
+
+	public void HidePlayer(bool state){
+		if (state) {
+			playerSprite.color = Color.black;
+		} else {
+			playerSprite.color = Color.white;
+		}
+	}
+
 	void OnCollisionEnter(Collision other){
 		if(other.gameObject.tag == "wall"){
 			Debug.Log("WALL");
