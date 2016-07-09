@@ -53,8 +53,8 @@ public class Player : MonoBehaviour {
 	}
 
 	public void IncreaseLightValue(float increaseValue){
-		lightVal -= increaseValue;
-		if (lightVal > 100f) {
+		lightVal += increaseValue;
+		if (lightVal >= 100f) {
 			lightVal = 100f;
 		}
 	}
@@ -191,6 +191,8 @@ public class Player : MonoBehaviour {
 		if(other.gameObject.tag == "fuel"){
 			Debug.Log("FUEL");
 			MazeManager.Instance.intFuelCount -= 1;
+			IncreaseLightValue(20f);
+
 			Destroy(other.gameObject);
 		}
 		if(other.gameObject.tag == "food"){
@@ -199,6 +201,7 @@ public class Player : MonoBehaviour {
 			Destroy(other.gameObject);
 		}
 	}
+
 	void OnTriggerStay(Collider other){
 		if(other.gameObject.tag == "mazeA"){
 			currentMaze = MAZES.A;

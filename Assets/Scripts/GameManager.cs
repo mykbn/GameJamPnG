@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour {
 	
 	public static GameManager Instance;
 	
-	bool isGameStarted = false;
+	public bool isGameStarted = false;
 	float timer = 0f;
 	
 	void Awake () {
