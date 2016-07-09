@@ -19,10 +19,18 @@ public class Player : MonoBehaviour {
 	public float speed;
 
 	public float lightVal;
+	public float foodVal;
 	public float score;
 
+
 	void Awake(){
-		Instance = this;
+		if (Instance == null) {
+			Instance = this; 
+		} else {
+			Instance = null;
+			Instance = this;
+		}
+		SwipeControls.Swipe = null;
 	}
 
 	// Use this for initialization
@@ -56,6 +64,20 @@ public class Player : MonoBehaviour {
 		lightVal += increaseValue;
 		if (lightVal >= 100f) {
 			lightVal = 100f;
+		}
+	}
+
+	public void ReduceFoodValue(float reductionValue){
+		foodVal -= reductionValue;
+		if (foodVal < 0f) {
+			foodVal = 0f;
+		}
+	}
+
+	public void IncreaseFoodValue(float increaseValue){
+		foodVal += increaseValue;
+		if (foodVal >= 100f) {
+			foodVal = 100f;
 		}
 	}
 
@@ -184,6 +206,7 @@ public class Player : MonoBehaviour {
 		if(other.gameObject.tag == "hole"){
 			Debug.Log("HOLE");
 			//DIE
+			UserInterface.Instance.ShowGameOver();
 		}
 
 	}
@@ -191,13 +214,15 @@ public class Player : MonoBehaviour {
 		if(other.gameObject.tag == "fuel"){
 			Debug.Log("FUEL");
 			MazeManager.Instance.intFuelCount -= 1;
-			IncreaseLightValue(20f);
+			IncreaseLightValue(30f);
 
 			Destroy(other.gameObject);
 		}
 		if(other.gameObject.tag == "food"){
 			Debug.Log("FOOD");
 			MazeManager.Instance.intFoodCount -= 1;
+			IncreaseFoodValue(30f);
+
 			Destroy(other.gameObject);
 		}
 	}

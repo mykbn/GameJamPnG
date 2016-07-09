@@ -5,12 +5,21 @@ public class LightController : MonoBehaviour {
 
 	public static LightController Instance;
 
+	public delegate void OnFinishLightChange();
+	public static OnFinishLightChange onFinishLightTransition;
+
 	private Light lightObj;
 
 	// Use this for initialization
 	void Awake () {
-		Instance = this;
+		if (Instance == null) {
+			Instance = this; 
+		} else {
+			Instance = null;
+			Instance = this;
+		}
 		lightObj = this.GetComponentInChildren<Light>();
+		onFinishLightTransition = null;
 	}
 
 
@@ -42,15 +51,20 @@ public class LightController : MonoBehaviour {
 	}
 
 	IEnumerator ChangeLightGradually(float target){
-		while(lightObj.intensity != target) {
-			if(lightObj.intensity > target){
+		while(lightObj.range != target) {
+			if(lightObj.range > target){
 				//Gradually Decrease Light Intensity
-				lightObj.intensity -= 0.2f;
+				lightObj.range -= 0.2f;
 			}else if(lightObj.intensity < target){
 				//Gradually Increase Light Intensity
-				lightObj.intensity += 0.2f;
+				lightObj.range += 0.2f;
 			}
 			yield return new WaitForEndOfFrame();
+		}
+
+		if(onFinishLightTransition != null){
+			onFinishLightTransition();
+//			StopAllCoroutines();
 		}
 		yield break;
 	}

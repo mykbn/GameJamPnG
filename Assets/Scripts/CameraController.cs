@@ -7,6 +7,10 @@ public class CameraController : MonoBehaviour {
 
 	Transform playerTransform;
 
+	void Awake(){
+		goPlayer = GameObject.FindObjectOfType<Player>().gameObject;
+	}
+
 	// Use this for initialization
 	void Start () {
 //		playerTransform = goPlayer.transform;
@@ -14,6 +18,8 @@ public class CameraController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		this.transform.position = new Vector3(goPlayer.transform.position.x, goPlayer.transform.position.y, -10);
+		if(goPlayer){
+			this.transform.position = new Vector3 (goPlayer.transform.position.x, goPlayer.transform.position.y, -10);
+		}
 	}
 }

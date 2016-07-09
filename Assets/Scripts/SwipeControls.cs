@@ -85,8 +85,15 @@ public class SwipeControls : MonoBehaviour {
 	public void SwipeControl(DIRECTIONS direction){
 		if(Swipe != null){
 			Swipe(direction);
-			if(!GameManager.Instance.isGameStarted){
+			if(!GameManager.Instance.isGameStarted && !GameManager.Instance.isGameOver){
 				GameManager.Instance.StartGame();
+			}
+			if (PlayerPrefs.HasKey ("isFirstPlay")) {
+				if (PlayerPrefs.GetInt ("isFirstPlay") == 1) {
+					UserInterface.Instance.ShowInstructions(false);
+				}
+			} else {
+				UserInterface.Instance.ShowInstructions(false);
 			}
 		}
 	}

@@ -10,12 +10,28 @@ public class UserInterface : MonoBehaviour {
 	[SerializeField] private GameObject goIngameUI;
 	[SerializeField] private GameObject goPauseMenu;
 	[SerializeField] private UIProgressBar progBarLight;
+	[SerializeField] private UIProgressBar progBarFood;
 	[SerializeField] private UILabel lblScore;
+	[SerializeField] private UILabel lblFoodCount;
+	[SerializeField] private UILabel lblFuelCount;
+	[SerializeField] private GameObject goGameOver;
+	[SerializeField] private GameObject goGameOverRetry;
+	[SerializeField] private UILabel lblFinalScore;
+	[SerializeField] private UILabel lblHighScore;
+	[SerializeField] private GameObject goInstructions;
+
 
 	public bool isIntroDone = false;
 
+	private const string highScorePrefsKey = "player_highscore";
+
 	void Awake(){
-		Instance = this;
+		if (Instance == null) {
+			Instance = this; 
+		} else {
+			Instance = null;
+			Instance = this;
+		}
 	}
 
 	public void OnClickTap(){
@@ -27,6 +43,7 @@ public class UserInterface : MonoBehaviour {
 
 
 	public void Start(){
+		Debug.Log("START!");
 		Player.Instance.HidePlayer(true);
 		LightController.Instance.TurnOffLight();
 		StartCoroutine(IntroLogo());
@@ -49,6 +66,64 @@ public class UserInterface : MonoBehaviour {
 		FadeChildren(goPauseMenu, false);
 	}
 
+	public void ShowGameOver(){
+		Time.timeScale = 0f;
+		GameManager.Instance.isGameOver = true;
+		NGUITools.SetActive(goGameOver, true);
+		LightController.onFinishLightTransition += AnimateGameOver;
+		LightController.Instance.TurnOffLight();
+		AnimateGameOver();
+	}
+
+	public void ShowGameOverRetry(){
+		NGUITools.SetActive(goGameOverRetry, true);
+		lblFinalScore.text = "You lasted for: " + FormatTime(Player.Instance.score);
+		SaveHighScore(Player.Instance.score);
+	}
+
+	public void Retry(){
+		Debug.Log("RETRY!");
+		GameManager.Instance.Retry();
+	}
+
+	public void ShowInstructions(bool state){
+		NGUITools.SetActive(goInstructions, true);
+		if (state) {
+			goInstructions.GetComponent<TweenScale>().ResetToBeginning();
+			goInstructions.GetComponent<TweenScale>().enabled = true;
+			goInstructions.GetComponent<TweenScale>().PlayForward();
+		} else {
+			goInstructions.GetComponent<TweenScale>().PlayReverse();
+			PlayerPrefs.SetInt ("isFirstPlay", 0);
+		}
+
+	}
+
+	public string FormatTime(float fltTime){
+		return string.Format("{0}:{1:00}", (int)fltTime / 60, (int)fltTime % 60);
+	}
+
+	private void SaveHighScore(float score){
+		if (PlayerPrefs.HasKey (highScorePrefsKey)) {
+			float highScore = PlayerPrefs.GetFloat(highScorePrefsKey);
+			if (highScore < score) {
+				PlayerPrefs.SetFloat (highScorePrefsKey, score);
+			}
+		} else {
+			PlayerPrefs.SetFloat (highScorePrefsKey, score);
+		}
+
+		lblHighScore.text = "High Score: " + FormatTime(PlayerPrefs.GetFloat(highScorePrefsKey));
+
+	}
+
+	private void AnimateGameOver(){
+		LightController.onFinishLightTransition -= AnimateGameOver;
+		goGameOver.GetComponentInChildren<TweenScale>().ResetToBeginning();
+		goGameOver.GetComponentInChildren<TweenScale>().enabled = true;
+		goGameOver.GetComponentInChildren<TweenScale>().Play();
+	}
+
 	private void FadeChildren(GameObject goParent, bool fadeIn){
 		TweenAlpha[] tweens = goParent.GetComponentsInChildren<TweenAlpha>();
 		for (int i = 0; i < tweens.Length; i++) {
@@ -63,7 +138,9 @@ public class UserInterface : MonoBehaviour {
 	}
 
 	IEnumerator IntroLogo(){
+		Debug.Log("INTROLOGO");
 		yield return new WaitForSeconds (0.5f);
+		tsLogo.enabled = true;
 		tsLogo.ResetToBeginning();
 		tsLogo.Play();
 		NGUITools.SetActive(tsLogo.gameObject, true);
@@ -78,6 +155,14 @@ public class UserInterface : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 		ShowInGameUI();
 		isIntroDone = true;
+		if (PlayerPrefs.HasKey ("isFirstPlay")) {
+			if (PlayerPrefs.GetInt ("isFirstPlay") == 1) {
+				ShowInstructions (true);
+			}
+		} else {
+			ShowInstructions (true);
+		}
+
 		yield break;
 	}
 
@@ -85,7 +170,11 @@ public class UserInterface : MonoBehaviour {
 		if(Player.Instance){
 			//Change Progress Bar Value Based on players lightVal
 			progBarLight.value = (Player.Instance.lightVal / 100f);
-			lblScore.text = string.Format("{0}:{1:00}", (int)Player.Instance.score / 60, (int)Player.Instance.score % 60);
+			progBarFood.value = (Player.Instance.foodVal / 100f);
+			lblScore.text = FormatTime(Player.Instance.score);
+			lblFoodCount.text = (MazeManager.Instance.totalFoodCount - MazeManager.Instance.intFoodCount).ToString() + "/" + MazeManager.Instance.totalFoodCount.ToString();
+			lblFuelCount.text = (MazeManager.Instance.totalFuelCount - MazeManager.Instance.intFuelCount).ToString() + "/" + MazeManager.Instance.totalFuelCount.ToString();
+
 		}
 	}
 

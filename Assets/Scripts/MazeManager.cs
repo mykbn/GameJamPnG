@@ -21,10 +21,18 @@ public class MazeManager : MonoBehaviour {
 
 	public int intFoodCount;
 	public int intFuelCount;
+
+	public int totalFoodCount;
+	public int totalFuelCount;
 //	public int intMaxSpawnAmount;
 
 	void Awake(){
-		Instance = this;
+		if (Instance == null) {
+			Instance = this; 
+		} else {
+			Instance = null;
+			Instance = this;
+		}
 	}
 
 	void Start(){
@@ -134,6 +142,9 @@ public class MazeManager : MonoBehaviour {
 			currentMazeD.RemoveAt(intRandom);
 
 		}
+
+		totalFoodCount = intFoodCount;
+		totalFuelCount = intFuelCount;
 	}
 
 }
