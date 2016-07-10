@@ -268,6 +268,7 @@ public class Player : MonoBehaviour {
 			MazeManager.Instance.intFuelCount -= 1;
 			IncreaseLightValue(30f);
 			IncreaseDifficulty();
+			AudioController.Instance.PlaySFX(SFX.PICKUP);
 			Destroy(other.gameObject);
 		}
 		if(other.gameObject.tag == "food"){
@@ -275,6 +276,7 @@ public class Player : MonoBehaviour {
 			MazeManager.Instance.intFoodCount -= 1;
 			IncreaseFoodValue(30f);
 			IncreaseDifficulty();
+			AudioController.Instance.PlaySFX(SFX.PICKUP);
 			Destroy(other.gameObject);
 		}
 	}

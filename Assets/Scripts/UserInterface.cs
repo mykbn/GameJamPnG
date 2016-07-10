@@ -69,6 +69,8 @@ public class UserInterface : MonoBehaviour {
 
 	public void ShowGameOver(){
 		Time.timeScale = 0f;
+		AudioController.Instance.StopBGM(BGM.DUNGEON);
+		AudioController.Instance.PlaySFX(SFX.DEATH);
 		GameManager.Instance.isGameOver = true;
 		NGUITools.SetActive(goGameOver, true);
 		LightController.onFinishLightTransition += AnimateGameOver;
@@ -152,7 +154,8 @@ public class UserInterface : MonoBehaviour {
 		tsLogo.duration = 0.3f;
 		tsLogo.enabled = true;
 		tsLogo.PlayReverse();
-		yield return new WaitForSeconds(1f);
+		AudioController.Instance.PlayBGM(BGM.DUNGEON);
+		yield return new WaitForSeconds(2f);
 		Player.Instance.HidePlayer(false);
 		LightController.Instance.GradualLightChange(8f);
 		yield return new WaitForSeconds(0.5f);
