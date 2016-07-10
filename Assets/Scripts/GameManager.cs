@@ -48,8 +48,8 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public void ReduceValues(){
-		Player.Instance.ReduceLightValue(2f);
-		Player.Instance.ReduceFoodValue(2f);
+		Player.Instance.ReduceLightValue(1f);
+		Player.Instance.ReduceFoodValue(1f);
 	}
 
 	public void Retry(){
