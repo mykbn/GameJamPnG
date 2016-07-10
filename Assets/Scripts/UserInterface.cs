@@ -19,9 +19,10 @@ public class UserInterface : MonoBehaviour {
 	[SerializeField] private UILabel lblFinalScore;
 	[SerializeField] private UILabel lblHighScore;
 	[SerializeField] private GameObject goInstructions;
-
+	[SerializeField] private UILabel lblGameOver;
 
 	public bool isIntroDone = false;
+	public string strGameOverMessage = "";
 
 	private const string highScorePrefsKey = "player_highscore";
 
@@ -76,8 +77,10 @@ public class UserInterface : MonoBehaviour {
 	}
 
 	public void ShowGameOverRetry(){
+		lblGameOver.text = strGameOverMessage;
 		NGUITools.SetActive(goGameOverRetry, true);
 		lblFinalScore.text = "You lasted for: " + FormatTime(Player.Instance.score);
+		lblGameOver.text = strGameOverMessage;
 		SaveHighScore(Player.Instance.score);
 	}
 
@@ -94,7 +97,7 @@ public class UserInterface : MonoBehaviour {
 			goInstructions.GetComponent<TweenScale>().PlayForward();
 		} else {
 			goInstructions.GetComponent<TweenScale>().PlayReverse();
-			PlayerPrefs.SetInt ("isFirstPlay", 0);
+//			PlayerPrefs.SetInt ("isFirstPlay", 0);
 		}
 
 	}
@@ -155,13 +158,13 @@ public class UserInterface : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 		ShowInGameUI();
 		isIntroDone = true;
-		if (PlayerPrefs.HasKey ("isFirstPlay")) {
-			if (PlayerPrefs.GetInt ("isFirstPlay") == 1) {
-				ShowInstructions (true);
-			}
-		} else {
-			ShowInstructions (true);
-		}
+//		if (PlayerPrefs.HasKey ("isFirstPlay")) {
+//			if (PlayerPrefs.GetInt ("isFirstPlay") == 1) {
+//				ShowInstructions (true);
+//			}
+//		} else {
+		ShowInstructions(true);
+//		}
 
 		yield break;
 	}
@@ -174,9 +177,7 @@ public class UserInterface : MonoBehaviour {
 			lblScore.text = FormatTime(Player.Instance.score);
 			lblFoodCount.text = (MazeManager.Instance.totalFoodCount - MazeManager.Instance.intFoodCount).ToString() + "/" + MazeManager.Instance.totalFoodCount.ToString();
 			lblFuelCount.text = (MazeManager.Instance.totalFuelCount - MazeManager.Instance.intFuelCount).ToString() + "/" + MazeManager.Instance.totalFuelCount.ToString();
-			if(MazeManager.Instance.intFoodCount == 0 && MazeManager.Instance.intFuelCount == 0){
-				Debug.Log("Done");
-			}
+
 
 		}
 	}

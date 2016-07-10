@@ -88,13 +88,13 @@ public class SwipeControls : MonoBehaviour {
 			if(!GameManager.Instance.isGameStarted && !GameManager.Instance.isGameOver){
 				GameManager.Instance.StartGame();
 			}
-			if (PlayerPrefs.HasKey ("isFirstPlay")) {
-				if (PlayerPrefs.GetInt ("isFirstPlay") == 1) {
-					UserInterface.Instance.ShowInstructions(false);
-				}
-			} else {
-				UserInterface.Instance.ShowInstructions(false);
-			}
+//			if (PlayerPrefs.HasKey ("isFirstPlay")) {
+//				if (PlayerPrefs.GetInt ("isFirstPlay") == 1) {
+//					UserInterface.Instance.ShowInstructions(false);
+//				}
+//			} else {
+			UserInterface.Instance.ShowInstructions(false);
+//			}
 		}
 	}
 }

@@ -28,6 +28,13 @@ public class GameManager : MonoBehaviour {
 			if(Player.Instance.lightVal <= 0 || Player.Instance.foodVal <= 0){
 				//SHOW GAME OVER
 				if(!isGameOver){
+					if(Player.Instance.lightVal <= 0){
+						UserInterface.Instance.strGameOverMessage = "You ran out of fuel.";
+					}else if(Player.Instance.foodVal <= 0){
+						UserInterface.Instance.strGameOverMessage = "You died of hunger.";
+					}else if(Player.Instance.lightVal <= 0 && Player.Instance.foodVal <= 0){
+						UserInterface.Instance.strGameOverMessage = "You ran out of fuel and died of hunger.";
+					}
 					UserInterface.Instance.ShowGameOver();
 				}
 			}

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Player : MonoBehaviour {
 	public static Player Instance;
-
+	
 	public GameObject goPlayer;
 	public Rigidbody rgdPlayer;
 	public Grid grid;
@@ -22,6 +22,8 @@ public class Player : MonoBehaviour {
 	public float foodVal;
 	public float score;
 	public int difficulty = 0;
+
+	public GameObject goCamera;
 
 	void Awake(){
 		if (Instance == null) {
@@ -86,9 +88,37 @@ public class Player : MonoBehaviour {
 	}
 
 	public void PlayerDirection(DIRECTIONS direction){
+//		RotateCamera (direction);
 		FacePlayer(direction);
 	}
+	public void RotateCamera(DIRECTIONS direction){
+		goCamera.transform.rotation = Quaternion.Euler(0f,0f,-90f);
+		if(direction == DIRECTIONS.LEFT){
+			goCamera.GetComponent<TweenRotation>().from = goCamera.transform.rotation.eulerAngles;
+			goCamera.GetComponent<TweenRotation>().to = new Vector3(0f,0f,90f);
+			goCamera.GetComponent<TweenRotation>().ResetToBeginning();
+			goCamera.GetComponent<TweenRotation>().PlayForward();
 
+		}
+		if(direction == DIRECTIONS.RIGHT){
+			goCamera.GetComponent<TweenRotation>().from = goCamera.transform.rotation.eulerAngles;
+			goCamera.GetComponent<TweenRotation>().to = new Vector3(0f,0f,0f);
+			goCamera.GetComponent<TweenRotation>().ResetToBeginning();
+			goCamera.GetComponent<TweenRotation>().PlayForward();
+		}
+		if(direction == DIRECTIONS.UP){
+			goCamera.GetComponent<TweenRotation>().from = goCamera.transform.rotation.eulerAngles;
+			goCamera.GetComponent<TweenRotation>().to = new Vector3(0f,0f,-90f);
+			goCamera.GetComponent<TweenRotation>().ResetToBeginning();
+			goCamera.GetComponent<TweenRotation>().PlayForward();
+		}
+		if(direction == DIRECTIONS.DOWN){
+			goCamera.GetComponent<TweenRotation>().from = goCamera.transform.rotation.eulerAngles;
+			goCamera.GetComponent<TweenRotation>().to = new Vector3(0f,0f,90f);
+			goCamera.GetComponent<TweenRotation>().ResetToBeginning();
+			goCamera.GetComponent<TweenRotation>().PlayForward();
+		}
+	}
 	public void FacePlayer(DIRECTIONS direction){
 		if(direction == currentDirection){
 			return;
@@ -110,7 +140,6 @@ public class Player : MonoBehaviour {
 			goPlayer.transform.Rotate(new Vector3(0f,0f,-90f));
 
 		}
-//		isMoving = true;
 		MovePlayer(direction);
 	}
 
@@ -206,6 +235,7 @@ public class Player : MonoBehaviour {
 		if(other.gameObject.tag == "hole"){
 			Debug.Log("HOLE");
 			//DIE
+			UserInterface.Instance.strGameOverMessage = "You fell to your doom!";
 			UserInterface.Instance.ShowGameOver();
 		}
 
@@ -219,13 +249,13 @@ public class Player : MonoBehaviour {
 		difficulty += 1;
 
 		if (difficulty == 0) {
-			MazeManager.Instance.SpawnFuelAndFood (8);
+			MazeManager.Instance.SpawnFuelAndFood (9);
 		}else if (difficulty == 1) {
-			MazeManager.Instance.SpawnFuelAndFood(6);
+			MazeManager.Instance.SpawnFuelAndFood(8);
 		}else if (difficulty == 2) {
-			MazeManager.Instance.SpawnFuelAndFood(4);
+			MazeManager.Instance.SpawnFuelAndFood(6);
 		}else if (difficulty >= 3) {
-			MazeManager.Instance.SpawnFuelAndFood(2);
+			MazeManager.Instance.SpawnFuelAndFood(5);
 			difficulty = 3;
 		}
 
